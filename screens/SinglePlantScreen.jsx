@@ -3,61 +3,74 @@ import {useContext, useState} from "react";
 import {AppContext} from "../config/context";
 import {styles} from "../config/styles";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import {addDoc, collection, doc} from "firebase/firestore";
+import {db, plantsRef, plantsRefNoConverter} from "../config/firebase";
 
 
 export const SinglePlantScreen = ({navigation}) => {
     const {plant, setPlant} = useContext(AppContext);
-    const [date, setDate] = useState(new Date());
+    const dateNow = new Date();
+    const [dateType, setDateType] = useState('')
     const [show, setShow] = useState(false);
 
     const onChange = (event, selectedDate) => {
         setShow(false);
-        setDate(selectedDate);
-        setPlant({...plant, added: selectedDate})
+        if (dateType === 'lastWatered') {
+            setPlant({...plant, lastWatered: selectedDate})
+        }
+        if (dateType === 'added') {
+            setPlant({...plant, added: selectedDate})
+        }
     };
 
-    const showDatepicker = () => {
-        setShow(!show);
+    const showDatepicker = (dateType) => {
+        setDateType(dateType)
+        setShow(true);
     };
+
+    const addNoteDb = async () => {
+        try {
+            const docRef = await addDoc(plantsRefNoConverter, plant);
+            console.log("doc written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("error adding doc: ", e)
+        }
+    }
 
     return (
         <View style={{margin: 10}}>
             <Text style={styles.label}>Name:</Text>
-            <TextInput style={styles.textInput} onChangeText={(text => setPlant({...plant, name: text}))}/>
+            <TextInput style={styles.textInput} defaultValue={plant.name} onChangeText={(text => setPlant({...plant, name: text}))}/>
             <Text style={styles.label}>Species:</Text>
-            <TextInput style={styles.textInput} onChangeText={(text => setPlant({...plant, species: text}))}/>
+            <TextInput style={styles.textInput} defaultValue={plant.species} onChangeText={(text => setPlant({...plant, species: text}))}/>
             <Text style={styles.label}>Watering (days):</Text>
             <TextInput style={styles.textInput} keyboardType={'numeric'}
+                       defaultValue={plant.watering}
                        onChangeText={(text => setPlant({...plant, watering: text}))}/>
-            <Text style={styles.label}>Last time watered:</Text>
-            <TouchableOpacity onPress={showDatepicker}>
+            <Text style={styles.label}>Added:</Text>
+            <TouchableOpacity onPress={()=>showDatepicker('added')}>
                 <Text style={styles.textInput}>
-                    {date.toLocaleDateString()}
+                    {plant.added.toLocaleDateString()}
+                </Text>
+            </TouchableOpacity>
+            <Text style={styles.label}>Last time watered:</Text>
+            <TouchableOpacity onPress={()=>showDatepicker('lastWatered')}>
+                <Text style={styles.textInput}>
+                    {plant.lastWatered.toLocaleDateString()}
                 </Text>
             </TouchableOpacity>
             {show && (
-                <RNDateTimePicker value={date} onDateChange={onChange} />
+                <RNDateTimePicker value={dateNow} onChange={onChange}/>
             )}
-
-
-            {/*<Pressable onPress={showDatePicker}>*/}
-            {/*    <TextInput style={styles.textInput} onChangeText={(text => setPlant({...plant, name: text}))}/>*/}
-            {/*</Pressable>*/}
-            {/*<TextInput>*/}
-            {/*    Species:*/}
-            {/*</TextInput>*/}
-            {/*<TextInput>*/}
-            {/*    Watering (days):*/}
-            {/*</TextInput>*/}
-            {/*<TextInput>*/}
-            {/*    Last time watered:*/}
-            {/*</TextInput>*/}
             <Button title={"save"} onPress={() =>
             {
-                setPlant({...plant, added: date})
-                console.log(plant)
+                if(plant.name ==='' || plant.watering===0) {
+                    alert("please fill out NAME and WATERING fields")
+                } else {
+                    console.log(plant);
+                    addNoteDb();
+                }
             }}/>
-
         </View>
     )
 }

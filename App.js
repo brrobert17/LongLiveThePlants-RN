@@ -21,7 +21,7 @@ export default function App() {
         name: "",
         species: "",
         added: new Date,
-        watering: 0,
+        watering: "",
         lastWatered: new Date,
     });
 
