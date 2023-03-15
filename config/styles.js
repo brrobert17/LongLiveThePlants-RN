@@ -55,6 +55,14 @@ export const styles = StyleSheet.create({
         padding: 2,
         borderColor: '#215A3D'
     },
+    waterAlert: {
+        fontFamily: 'Amaranth_400Regular',
+        padding: 2,
+        marginTop: 7,
+        borderRadius: 5,
+        backgroundColor: '#dddf63',
+        letterSpacing: 4
+    },
 
     headerButton: {
         height: 20,

@@ -8,7 +8,7 @@ import {db, plantsRef, plantsRefNoConverter} from "../config/firebase";
 
 
 export const SinglePlantScreen = ({navigation}) => {
-    const {plant, setPlant} = useContext(AppContext);
+    const {plant, setPlant, savePlant} = useContext(AppContext);
     const dateNow = new Date();
     const [dateType, setDateType] = useState('')
     const [show, setShow] = useState(false);
@@ -28,15 +28,6 @@ export const SinglePlantScreen = ({navigation}) => {
         setShow(true);
     };
 
-    const addNoteDb = async () => {
-        try {
-            const docRef = await addDoc(plantsRefNoConverter, plant);
-            console.log("doc written with ID: ", docRef.id);
-        } catch (e) {
-            console.error("error adding doc: ", e)
-        }
-    }
-
     return (
         <View style={{margin: 10}}>
             <Text style={styles.label}>Name:</Text>
@@ -45,8 +36,8 @@ export const SinglePlantScreen = ({navigation}) => {
             <TextInput style={styles.textInput} defaultValue={plant.species} onChangeText={(text => setPlant({...plant, species: text}))}/>
             <Text style={styles.label}>Watering (days):</Text>
             <TextInput style={styles.textInput} keyboardType={'numeric'}
-                       defaultValue={plant.watering}
-                       onChangeText={(text => setPlant({...plant, watering: text}))}/>
+                       defaultValue={plant.watering.toString()}
+                       onChangeText={(text => setPlant({...plant, watering: +text}))}/>
             <Text style={styles.label}>Added:</Text>
             <TouchableOpacity onPress={()=>showDatepicker('added')}>
                 <Text style={styles.textInput}>
@@ -68,7 +59,8 @@ export const SinglePlantScreen = ({navigation}) => {
                     alert("please fill out NAME and WATERING fields")
                 } else {
                     console.log(plant);
-                    addNoteDb();
+                    savePlant();
+                    navigation.navigate('Plants');
                 }
             }}/>
         </View>

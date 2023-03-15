@@ -2,15 +2,18 @@ import {FlatList, ImageBackground, SafeAreaView, Text, TouchableOpacity, View} f
 import {PlantCard} from "../components/PlantCard";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {plantsRef} from "../config/firebase";
+import { query, orderBy } from "firebase/firestore";
 
 export const PlantsScreen = ({navigation}) => {
 
-    const [value] = useCollectionData(plantsRef);
+    const queryToOrder = query(plantsRef, orderBy("added", "desc"));
+    const [value] = useCollectionData(queryToOrder);
     return(
         <View>
             {value?
                 (<FlatList data={value}
                               numColumns={2}
+
                               renderItem={({item}) => <PlantCard plant={item}/>}/>)
             : (<Text>Nope</Text>)}
         </View>

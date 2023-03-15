@@ -10,6 +10,8 @@ import {PlantsScreen} from "./screens/PlantsScreen";
 import {styles} from "./config/styles";
 import {Button, ImageBackground, TouchableOpacity} from "react-native";
 import {SinglePlantScreen} from "./screens/SinglePlantScreen";
+import {addDoc, doc, setDoc} from "firebase/firestore";
+import {db, plantsRefNoConverter} from "./config/firebase";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -17,13 +19,15 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-    const [plant, setPlant] = useState({
+    const newPlant = {
         name: "",
         species: "",
         added: new Date,
         watering: "",
         lastWatered: new Date,
-    });
+    }
+
+    const [plant, setPlant] = useState(newPlant);
 
     let [fontsLoaded] = useFonts({
         Amaranth_400Regular,
@@ -38,8 +42,47 @@ export default function App() {
     if (!fontsLoaded) {
         return null;
     }
+
+    const savePlant = async () => {
+        try {
+            const docRef = await addDoc(plantsRefNoConverter, plant);
+            console.log("doc written with ID: ", docRef.id);
+            setPlant(newPlant);
+        } catch (e) {
+            console.error("error adding doc: ", e)
+        }
+    }
+    
+    const updatePlant = async (plantToUpdate) => {
+        // const c1 = {
+        //     // name: plantToUpdate.name,
+        //     // species: plantToUpdate.species,
+        //     watering: +plantToUpdate.watering,
+        //     added: new Date(plant.added.split('/').reverse().join('-')),
+        //     lastWatered: new Date()
+        // }
+        const c2 ={
+            lastWatered: new Date(),
+            added: new Date(plantToUpdate.added.split('/').reverse().join('-')),
+            watering: plantToUpdate.watering,
+            name: plantToUpdate.name,
+            species: plantToUpdate.species
+        }
+        console.log(plantToUpdate.id)
+        const docRef = await doc(db, "plants", plantToUpdate.id);
+        await setDoc(docRef, c2).then(()=> {
+            console.log("updated", plantToUpdate);
+            console.log("updated", c2);
+        }).catch(error => {
+            console.error(error);
+        });
+    }
+    // const updatePlant = (plantToUpdate) => {
+    //   console.log(plantToUpdate)
+    // }
+
     return (
-        <AppContext.Provider value={{plant, setPlant}}>
+        <AppContext.Provider value={{plant, setPlant, savePlant, updatePlant}}>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName={"Plants"}
                                  onLayout={onLayoutRootView()}
