@@ -54,13 +54,6 @@ export default function App() {
     }
     
     const updatePlant = async (plantToUpdate) => {
-        // const c1 = {
-        //     // name: plantToUpdate.name,
-        //     // species: plantToUpdate.species,
-        //     watering: +plantToUpdate.watering,
-        //     added: new Date(plant.added.split('/').reverse().join('-')),
-        //     lastWatered: new Date()
-        // }
         const c2 ={
             lastWatered: new Date(),
             added: new Date(plantToUpdate.added.split('/').reverse().join('-')),
@@ -68,23 +61,18 @@ export default function App() {
             name: plantToUpdate.name,
             species: plantToUpdate.species
         }
-        console.log(plantToUpdate.id)
         const docRef = await doc(db, "plants", plantToUpdate.id);
         await setDoc(docRef, c2).then(()=> {
-            console.log("updated", plantToUpdate);
             console.log("updated", c2);
         }).catch(error => {
             console.error(error);
         });
     }
-    // const updatePlant = (plantToUpdate) => {
-    //   console.log(plantToUpdate)
-    // }
 
     return (
         <AppContext.Provider value={{plant, setPlant, savePlant, updatePlant}}>
             <NavigationContainer>
-                <Stack.Navigator initialRouteName={"Plants"}
+                <Stack.Navigator initialRouteName={"Welcome"}
                                  onLayout={onLayoutRootView()}
                                  screenOptions={{
                                      headerStyle: {

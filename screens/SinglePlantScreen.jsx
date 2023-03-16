@@ -3,9 +3,6 @@ import {useContext, useState} from "react";
 import {AppContext} from "../config/context";
 import {styles} from "../config/styles";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import {addDoc, collection, doc} from "firebase/firestore";
-import {db, plantsRef, plantsRefNoConverter} from "../config/firebase";
-
 
 export const SinglePlantScreen = ({navigation}) => {
     const {plant, setPlant, savePlant} = useContext(AppContext);

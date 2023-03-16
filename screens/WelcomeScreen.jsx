@@ -2,7 +2,7 @@ import {Image, Text, View} from "react-native";
 import {styles} from "../config/styles";
 
 export const WelcomeScreen = ({navigation}) => {
-    //setTimeout(() => navigation.navigate("Login"), 3000);
+    setTimeout(() => navigation.navigate("Login"), 3000);
     return (
         <View style={styles.container}>
             <Image style={styles.logo} source={require("../assets/images/logo2.png")}/>
