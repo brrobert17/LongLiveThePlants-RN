@@ -5,7 +5,7 @@ import {AppContext} from "../config/context";
 
 export const PlantCard = ({plant}) => {
 
-    const { updatePlant } = useContext(AppContext);
+    const {updatePlant} = useContext(AppContext);
     const myDate = new Date(plant.lastWatered.split('/').reverse().join('-'));
     myDate.setDate(myDate.getDate() + +plant.watering);
 
@@ -20,19 +20,24 @@ export const PlantCard = ({plant}) => {
         ]);
     }
 
+    let imgSrc = plant.img === "" ? require('../assets/images/logo2.png') : {uri: plant.img};
+
 
     return (
         <View style={styles.plantCardContainer}>
-            <Text style={styles.plantCardText}>
-                Name: "{plant.name}" {'\n'}
-                Species: {plant.species} {'\n'}
-                Date added: {'\n'}
-                {plant.added} {'\n'}
-                Watering every {plant.watering} days {'\n'}
-                Last time watered: {'\n'}
-                {plant.lastWatered}
-            </Text>
-            <Image style={styles.plantCardImage} source={require('../assets/images/logo2.png')}/>
+            {/*<TouchableOpacity>*/}
+                <Text style={styles.plantCardText}>
+                    Name: "{plant.name}" {'\n'}
+                    Species: {plant.species} {'\n'}
+                    Date added: {'\n'}
+                    {plant.added} {'\n'}
+                    Watering every {plant.watering} days {'\n'}
+                    Last time watered: {'\n'}
+                    {plant.lastWatered}
+                </Text>
+                <Image style={styles.plantCardImage}
+                       source={imgSrc}/>
+            {/*</TouchableOpacity>*/}
             {(myDate.getDate() <= new Date().getDate()) && (
                 <TouchableOpacity onPress={water}>
                     <Text style={styles.waterAlert}>

@@ -12,6 +12,7 @@ import {Button, ImageBackground, TouchableOpacity} from "react-native";
 import {SinglePlantScreen} from "./screens/SinglePlantScreen";
 import {addDoc, doc, setDoc} from "firebase/firestore";
 import {db, plantsRefNoConverter} from "./config/firebase";
+import {RegisterScreen} from "./screens/RegisterScreen";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,6 +26,7 @@ export default function App() {
         added: new Date,
         watering: "",
         lastWatered: new Date,
+        img: ""
     }
 
     const [plant, setPlant] = useState(newPlant);
@@ -43,23 +45,27 @@ export default function App() {
         return null;
     }
 
-    const savePlant = async () => {
+    const savePlant = async (url) => {
         try {
-            const docRef = await addDoc(plantsRefNoConverter, plant);
+            const upToDatePlant = {
+                ...plant, img: url ? url : ""};
+            console.log("saving... "+upToDatePlant);
+            const docRef = await addDoc(plantsRefNoConverter, upToDatePlant);
             console.log("doc written with ID: ", docRef.id);
             setPlant(newPlant);
         } catch (e) {
             console.error("error adding doc: ", e)
         }
-    }
-    
+    };
+
     const updatePlant = async (plantToUpdate) => {
         const c2 ={
             lastWatered: new Date(),
             added: new Date(plantToUpdate.added.split('/').reverse().join('-')),
             watering: plantToUpdate.watering,
             name: plantToUpdate.name,
-            species: plantToUpdate.species
+            species: plantToUpdate.species,
+            img: plantToUpdate.img
         }
         const docRef = await doc(db, "plants", plantToUpdate.id);
         await setDoc(docRef, c2).then(()=> {
@@ -72,7 +78,7 @@ export default function App() {
     return (
         <AppContext.Provider value={{plant, setPlant, savePlant, updatePlant}}>
             <NavigationContainer>
-                <Stack.Navigator initialRouteName={"Welcome"}
+                <Stack.Navigator initialRouteName={"Plants"}
                                  onLayout={onLayoutRootView()}
                                  screenOptions={{
                                      headerStyle: {
@@ -97,6 +103,7 @@ export default function App() {
                                       )
                                   })}/>
                     <Stack.Screen name={"Login"} component={LoginScreen}/>
+                    <Stack.Screen name={"Register"} component={RegisterScreen}/>
                     <Stack.Screen name={"SinglePlant"} component={SinglePlantScreen}/>
                 </Stack.Navigator>
             </NavigationContainer>

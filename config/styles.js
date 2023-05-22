@@ -29,6 +29,7 @@ export const styles = StyleSheet.create({
     plantCardImage: {
         marginTop: 10,
         height: 70,
+        width: 40,
         resizeMode: 'contain',
     },
     text: {
@@ -87,6 +88,18 @@ export const styles = StyleSheet.create({
         resizeMode: 'contain',
         marginBottom: 15
     },
+    imagePreview:{
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+        alignItems:'center',
+        backgroundColor: "#b01179"
+    },
+    image:{
+        width: Dimensions.get('window').width,
+        height: 550,
+        resizeMode: 'contain'
+
+    }
 
 
 });

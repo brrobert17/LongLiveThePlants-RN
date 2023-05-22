@@ -1,4 +1,4 @@
-import {FlatList, ImageBackground, SafeAreaView, Text, TouchableOpacity, View} from "react-native";
+import {FlatList, Image, Text, TouchableOpacity, View} from "react-native";
 import {PlantCard} from "../components/PlantCard";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {auth, plantsRef} from "../config/firebase";
