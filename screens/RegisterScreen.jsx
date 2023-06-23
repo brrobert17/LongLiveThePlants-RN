@@ -1,4 +1,4 @@
-import {Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Button, Dimensions, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {styles} from "../config/styles";
 import {auth} from "../config/firebase";
 import {useAuthState} from "react-firebase-hooks/auth";
@@ -22,19 +22,24 @@ export const RegisterScreen = ({navigation}) => {
         });
     }
     return (
-        <View>
-            <TextInput placeholder={"email"}
-                       style={{fontSize: 25}}
-                       onChangeText={(e) => setUserCredentials({...userCredentials, email: e})}>
-            </TextInput>
-            <TextInput placeholder={"password"}
-                       style={{fontSize: 25}}
-                       secureTextEntry={true}
-                       onChangeText={(e) => setUserCredentials({...userCredentials, password: e})}>
-            </TextInput>
-            <TouchableOpacity style={styles.touchableOpacity} onPress={registerWithEmail}>
-                <Text>Register</Text>
-            </TouchableOpacity>
+        <View style={styles.container}>
+            <View style={{width: Dimensions.get("window").width/1.5}}>
+                <TextInput placeholder={"email"}
+                           style={styles.textInputSc}
+                           onChangeText={(e) => setUserCredentials({...userCredentials, email: e})}>
+                </TextInput>
+            </View>
+            <View style={{width: Dimensions.get("window").width/1.5}}>
+                <TextInput placeholder={"password"}
+                           style={styles.textInputSc}
+                           secureTextEntry={true}
+                           onChangeText={(e) => setUserCredentials({...userCredentials, password: e})}>
+                </TextInput>
+            </View>
+            <View style={{height: 5}}/>
+            <View style={{width: Dimensions.get("window").width/1.5}}>
+                <Button onPress={registerWithEmail} title={"REGISTER"} color={"#009657"}/>
+            </View>
         </View>
 
     )

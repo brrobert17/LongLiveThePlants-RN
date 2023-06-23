@@ -27,9 +27,9 @@ export const styles = StyleSheet.create({
         lineHeight: 22
     },
     plantCardImage: {
-        marginTop: 10,
-        height: 70,
-        width: 40,
+        marginTop: 6,
+        height: 75,
+        width: 65,
         resizeMode: 'contain',
     },
     text: {
@@ -50,6 +50,19 @@ export const styles = StyleSheet.create({
         letterSpacing: 5,
         borderStyle: 'solid',
         borderWidth: 1,
+        borderRadius: 5,
+        margin: 1,
+        marginBottom: 10,
+        padding: 2,
+        borderColor: '#215A3D'
+    },
+    textInputSc: {
+        fontFamily: 'Amaranth_700Bold_Italic',
+        fontSize: 25,
+        color: '#215A3D',
+        letterSpacing: 3,
+        borderStyle: 'solid',
+        borderWidth: 2,
         borderRadius: 5,
         margin: 1,
         marginBottom: 10,
@@ -95,10 +108,16 @@ export const styles = StyleSheet.create({
         backgroundColor: "#b01179"
     },
     image:{
+        marginTop: 10,
+        alignSelf: 'center',
         width: Dimensions.get('window').width,
-        height: 550,
+        height: 240,
         resizeMode: 'contain'
 
+    },
+    myButton: {
+        backgroundColor: "#009657",
+        marginBottom: 15
     }
 
 
